@@ -1,0 +1,61 @@
+# PoC: the whole Status-Page infra on one machine, so you can SEE every process.
+# 5 containers = the real architecture: data (db), cache/queue (redis),
+# and the 3 app processes (web / rq worker / scheduler), all from one image.
+
+services:
+  db:                         # PostgreSQL — the permanent data
+    image: postgres:15
+    environment:
+      POSTGRES_DB: statuspage
+      POSTGRES_USER: statuspage
+      POSTGRES_PASSWORD: statuspage
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U statuspage"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:                      # Redis — DB0 = tasks queue, DB1 = cache
+    image: redis:7
+    ports:
+      - "6379:6379"           # exposed so you can poke it with redis-cli from the host
+
+  init:                       # one-shot: migrations + static + superuser, then exits
+    build: .
+    command: >
+      sh -c "python manage.py migrate &&
+             (python manage.py collectstatic --no-input || true) &&
+             (python manage.py createsuperuser --noinput || true)"
+    environment:
+      DJANGO_SUPERUSER_USERNAME: admin
+      DJANGO_SUPERUSER_EMAIL: admin@example.com
+      DJANGO_SUPERUSER_PASSWORD: adminadmin
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    restart: "no"
+
+  web:                        # process 1: gunicorn (status-page.service)
+    build: .
+    command: gunicorn --chdir /opt/status-page/statuspage --bind 0.0.0.0:8001 statuspage.wsgi
+    ports:
+      - "8001:8001"
+    depends_on:
+      init:
+        condition: service_completed_successfully
+
+  worker:                     # process 2: rq worker (status-page-rq.service)
+    build: .
+    command: python manage.py rqworker high default low
+    depends_on:
+      init:
+        condition: service_completed_successfully
+
+  scheduler:                  # process 3: rq scheduler (status-page-scheduler.service)
+    build: .
+    command: python manage.py rqscheduler
+    depends_on:
+      init:
+        condition: service_completed_successfully

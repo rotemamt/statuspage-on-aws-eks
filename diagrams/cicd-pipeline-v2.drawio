@@ -1,0 +1,238 @@
+<mxfile host="Electron">
+  <diagram name="CI-CD-Pipeline" id="cicd-pipeline-01">
+    <mxGraphModel dx="1147" dy="589" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1020" pageHeight="2400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=1;align=left;fontSize=18;fontStyle=1;fontColor=#24292F;" value="CI/CD Pipelines (GitHub Actions)&amp;nbsp;" vertex="1">
+          <mxGeometry height="30" width="820" x="40" y="10" as="geometry" />
+        </mxCell>
+        <mxCell id="subtitle" parent="1" style="text;html=1;align=left;fontSize=12;fontColor=#57606A;" value="Runs automatically on every push / pull request to main. Goal: catch problems BEFORE code reaches a server." vertex="1">
+          <mxGeometry height="20" width="820" x="40" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="dev" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ECEFF1;strokeColor=#546E7A;fontColor=#263238;fontSize=13;" value="Developer&#xa;writes code" vertex="1">
+          <mxGeometry height="60" width="130" x="60" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="repo" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EAF2FF;strokeColor=#0969DA;fontColor=#0A3069;fontSize=13;" value="GitHub repo&#xa;(main branch)" vertex="1">
+          <mxGeometry height="60" width="150" x="330" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="e_dev_repo" edge="1" parent="1" source="dev" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;fontSize=12;strokeColor=#24292F;fontColor=#24292F;" target="repo" value="git push">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="trigger" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=6 4;fillColor=#FFF3E0;strokeColor=#ED7100;fontColor=#8A4B00;fontSize=12;" value="Trigger / Event&#xa;on: push, pull_request&#xa;branches: [ main ]" vertex="1">
+          <mxGeometry height="70" width="220" x="150" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="e_push_trigger" edge="1" parent="1" style="endArrow=block;html=1;rounded=0;dashed=1;dashPattern=6 4;strokeColor=#ED7100;fontColor=#8A4B00;fontSize=11;" target="trigger" value="this push&#xa;triggers it">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="260" y="160" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="runner" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F6F8FA;strokeColor=#0969DA;fontColor=#0969DA;verticalAlign=top;align=left;spacingLeft=12;spacingTop=8;fontSize=13;fontStyle=1;dashed=0;" value="" vertex="1">
+          <mxGeometry height="610" width="500" x="120" y="330" as="geometry" />
+        </mxCell>
+        <mxCell id="s1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DDF4FF;strokeColor=#0969DA;fontColor=#0A3069;fontSize=12;" value="1 · Checkout code&#xa;actions/checkout&#xa;pulls your repo onto the runner" vertex="1">
+          <mxGeometry height="60" width="360" x="180" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="s2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DDF4FF;strokeColor=#0969DA;fontColor=#0A3069;fontSize=12;" value="2 · Set up Python 3.10&#xa;actions/setup-python&#xa;same version the app runs on" vertex="1">
+          <mxGeometry height="60" width="360" x="180" y="460" as="geometry" />
+        </mxCell>
+        <mxCell id="s3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DDF4FF;strokeColor=#0969DA;fontColor=#0A3069;fontSize=12;" value="3 · Install dependencies&#xa;pip install -r requirements.txt" vertex="1">
+          <mxGeometry height="50" width="360" x="180" y="540" as="geometry" />
+        </mxCell>
+        <mxCell id="s4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DDF4FF;strokeColor=#0969DA;fontColor=#0A3069;fontSize=12;" value="4 · Lint (code style check)&#xa;flake8 / black --check" vertex="1">
+          <mxGeometry height="50" width="360" x="180" y="610" as="geometry" />
+        </mxCell>
+        <mxCell id="s_infra" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DDF4FF;strokeColor=#0969DA;fontColor=#0A3069;fontSize=12;" value="5 · Infra scan (tfsec / checkov)&#xa;scans infra/*.tf — fails on HIGH severity misconfig" vertex="1">
+          <mxGeometry height="50" width="360" x="180" y="680" as="geometry" />
+        </mxCell>
+        <mxCell id="s5" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#CFF5D8;strokeColor=#1A7F37;fontColor=#0A3622;fontSize=12;fontStyle=1;" value="6 · Run tests&#xa;python manage.py migrate&#xa;python manage.py test" vertex="1">
+          <mxGeometry height="70" width="360" x="180" y="750" as="geometry" />
+        </mxCell>
+        <mxCell id="e_t_s1" edge="1" parent="1" source="trigger" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#0969DA;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" target="s1" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="260.06" y="320.06" />
+              <mxPoint x="360.06" y="320.06" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_s1_s2" edge="1" parent="1" source="s1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#0969DA;" target="s2" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_s2_s3" edge="1" parent="1" source="s2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#0969DA;" target="s3" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_s3_s4" edge="1" parent="1" source="s3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#0969DA;" target="s4" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_s4_sinfra" edge="1" parent="1" source="s4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#0969DA;" target="s_infra" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_sinfra_s5" edge="1" parent="1" source="s_infra" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#0969DA;" target="s5" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="svcbox" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=6 4;fillColor=#F3E8FF;strokeColor=#8250DF;fontColor=#3B1C6B;verticalAlign=top;align=left;spacingLeft=8;spacingTop=6;fontSize=11;" value="Service containers&#xa;(temporary, for the test step only)" vertex="1">
+          <mxGeometry height="180" width="180" x="670" y="720" as="geometry" />
+        </mxCell>
+        <mxCell id="svc_pg" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#8250DF;fontColor=#3B1C6B;fontSize=12;" value="PostgreSQL&#xa;(test DB)" vertex="1">
+          <mxGeometry height="55" width="140" x="690" y="760" as="geometry" />
+        </mxCell>
+        <mxCell id="svc_redis" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#8250DF;fontColor=#3B1C6B;fontSize=12;" value="Redis&#xa;(test cache/queue)" vertex="1">
+          <mxGeometry height="55" width="140" x="690" y="830" as="geometry" />
+        </mxCell>
+        <mxCell id="e_s5_pg" edge="1" parent="1" source="s5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=block;endArrow=block;dashed=1;strokeColor=#8250DF;fontColor=#3B1C6B;fontSize=10;" target="svc_pg" value="tests talk to">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="615" y="785" />
+              <mxPoint x="615" y="809.94" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="pass" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#CFF5D8;strokeColor=#1A7F37;fontColor=#0A3622;fontSize=12;fontStyle=1;" value="✓ All steps passed&#xa;green check on the PR&#xa;(safe to merge / deploy)" vertex="1">
+          <mxGeometry height="70" width="230" x="125" y="1030" as="geometry" />
+        </mxCell>
+        <mxCell id="fail" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEBE9;strokeColor=#CF222E;fontColor=#82071E;fontSize=12;fontStyle=1;" value="✗ A step failed&#xa;red X on the PR&#xa;pipeline stops, nothing deployed" vertex="1">
+          <mxGeometry height="70" width="230" x="510" y="1030" as="geometry" />
+        </mxCell>
+        <mxCell id="e_run_pass" edge="1" parent="1" source="runner" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#1A7F37;fontColor=#1A7F37;exitX=0.25;exitY=1;" target="pass" value="success">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_run_fail" edge="1" parent="1" source="runner" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#CF222E;fontColor=#CF222E;exitX=0.75;exitY=1;" target="fail" value="any failure">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_ci_to_cd" edge="1" parent="1" source="pass" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#1A7F37;fontColor=#1A7F37;fontSize=12;fontStyle=1;" target="cd_ci_pass" value="same green check&#xa;hands off to CD ↓">
+          <mxGeometry relative="1" x="-0.4286" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="cd_title" parent="1" style="text;html=1;align=left;fontSize=18;fontStyle=1;fontColor=#24292F;" value="CD Pipeline : build image, push, deploy" vertex="1">
+          <mxGeometry height="30" width="900" x="40" y="1170" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_subtitle" parent="1" style="text;html=1;align=left;fontSize=12;fontColor=#57606A;" value="Runs ONLY if the CI job passed. Goal: package the app and roll it out to EKS with no downtime." vertex="1">
+          <mxGeometry height="20" width="900" x="40" y="1200" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_ci_pass" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#CFF5D8;strokeColor=#1A7F37;fontColor=#0A3622;fontSize=12;fontStyle=1;" value="✓ CI passed&#xa;(from the build-and-test job)" vertex="1">
+          <mxGeometry height="60" width="240" x="120" y="1240" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_needsnote" parent="1" style="text;html=1;align=left;whiteSpace=wrap;fontSize=11;fontColor=#1A7F37;spacingLeft=4;" value="needs: build-and-test  →  the deploy job starts only on green. On red, it never runs." vertex="1">
+          <mxGeometry height="40" width="420" x="380" y="1250" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_runner2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F6F8FA;strokeColor=#0969DA;fontColor=#0969DA;verticalAlign=top;align=left;spacingLeft=12;spacingTop=8;fontSize=13;fontStyle=1;dashed=0;" value="" vertex="1">
+          <mxGeometry height="720" width="520" x="90" y="1340" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_d1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DDF4FF;strokeColor=#0969DA;fontColor=#0A3069;fontSize=12;" value="1 · Checkout code&#xa;actions/checkout" vertex="1">
+          <mxGeometry height="50" width="360" x="150" y="1390" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_d2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF3E0;strokeColor=#ED7100;fontColor=#8A4B00;fontSize=12;" value="2 · Configure AWS credentials&#xa;via OIDC → assumes a temporary IAM role&#xa;(no long-lived secret stored)" vertex="1">
+          <mxGeometry height="70" width="360" x="150" y="1460" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_d3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF3E0;strokeColor=#ED7100;fontColor=#8A4B00;fontSize=12;" value="3 · Log in to Amazon ECR&#xa;docker login to your registry" vertex="1">
+          <mxGeometry height="50" width="360" x="150" y="1550" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_d4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DDF4FF;strokeColor=#0969DA;fontColor=#0A3069;fontSize=12;" value="4 · Build Docker image&#xa;docker build -t status-page:&lt;git-sha&gt; ." vertex="1">
+          <mxGeometry height="60" width="360" x="150" y="1620" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_d4b" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF3E0;strokeColor=#ED7100;fontColor=#8A4B00;fontSize=12;" value="5 · Trivy scan image (fail on HIGH)&#xa;trivy image status-page:&lt;git-sha&gt;" vertex="1">
+          <mxGeometry height="60" width="360" x="150" y="1690" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_d5" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DDF4FF;strokeColor=#0969DA;fontColor=#0A3069;fontSize=12;" value="6 · Push image to ECR&#xa;docker push status-page:&lt;git-sha&gt;" vertex="1">
+          <mxGeometry height="55" width="360" x="150" y="1770" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_d5b" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DDF4FF;strokeColor=#0969DA;fontColor=#0A3069;fontSize=12;" value="7 · Run DB migration (one-off Job)&#xa;envsubst injects &lt;git-sha&gt; into migrate-job.yaml, then apply&#xa;kubectl wait --for=condition=complete — blocks until done, BEFORE pods update" vertex="1">
+          <mxGeometry height="90" width="360" x="150" y="1835" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_rbacnote" parent="1" style="text;html=1;align=left;whiteSpace=wrap;fontSize=11;fontColor=#8A4B00;spacingLeft=4;" value="Deploy role scope: kubectl set-image only on web / rq-worker / scheduler Deployments — not cluster-admin. Narrows blast radius if the OIDC session leaks." vertex="1">
+          <mxGeometry height="70" width="260" x="530" y="1845" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_d6" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#CFF5D8;strokeColor=#1A7F37;fontColor=#0A3622;fontSize=12;fontStyle=1;" value="8 · Deploy to EKS&#xa;kubectl set image on web / rq-worker / scheduler&#xa;updates all three Deployments to the new image" vertex="1">
+          <mxGeometry height="80" width="360" x="150" y="1945" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_e_ci_d1" edge="1" parent="1" source="cd_ci_pass" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#1A7F37;" target="cd_d1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_e_d1_d2" edge="1" parent="1" source="cd_d1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#0969DA;" target="cd_d2" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_e_d2_d3" edge="1" parent="1" source="cd_d2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#0969DA;" target="cd_d3" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_e_d3_d4" edge="1" parent="1" source="cd_d3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#0969DA;" target="cd_d4" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_e_d4_d4b" edge="1" parent="1" source="cd_d4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#0969DA;" target="cd_d4b" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_e_d4b_d5" edge="1" parent="1" source="cd_d4b" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#0969DA;" target="cd_d5" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_e_d5_d5b" edge="1" parent="1" source="cd_d5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#0969DA;" target="cd_d5b" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_e_d5b_d6" edge="1" parent="1" source="cd_d5b" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#0969DA;" target="cd_d6" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_ecr" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE0CC;strokeColor=#ED7100;fontColor=#8A4B00;fontSize=12;fontStyle=1;" value="Amazon ECR&#xa;image registry&#xa;(permanent image storage)" vertex="1">
+          <mxGeometry height="80" width="240" x="702.5" y="1757.5" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_e_d5_ecr" edge="1" parent="1" source="cd_d5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#ED7100;fontColor=#8A4B00;fontSize=11;" target="cd_ecr" value="push image">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_eks" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E6F6F7;strokeColor=#00A4A6;fontColor=#0A5C5E;verticalAlign=top;align=left;spacingLeft=10;spacingTop=6;fontSize=12;fontStyle=1;" value="EKS cluster — runs the pods" vertex="1">
+          <mxGeometry height="180" width="320" x="660" y="2000" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_pod_web" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#00A4A6;fontColor=#0A5C5E;fontSize=11;" value="web pod&#xa;(Django)" vertex="1">
+          <mxGeometry height="60" width="90" x="680" y="2040" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_pod_rq" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#00A4A6;fontColor=#0A5C5E;fontSize=11;" value="rq worker" vertex="1">
+          <mxGeometry height="60" width="80" x="790" y="2040" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_pod_sched" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#00A4A6;fontColor=#0A5C5E;fontSize=11;" value="scheduler" vertex="1">
+          <mxGeometry height="60" width="80" x="885" y="2040" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_rollnote" parent="1" style="text;html=1;align=left;whiteSpace=wrap;fontSize=10;fontColor=#0A5C5E;" value="rolling update: new pod up &amp; healthy → old pod down, one by one (no downtime)" vertex="1">
+          <mxGeometry height="40" width="295" x="675" y="2110" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_e_ecr_eks" edge="1" parent="1" source="cd_ecr" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#ED7100;fontColor=#8A4B00;fontSize=11;" target="cd_eks" value="pull image">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_e_d6_eks" edge="1" parent="1" source="cd_d6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#1A7F37;fontColor=#1A7F37;fontSize=11;exitX=1;exitY=0.5;entryX=0;entryY=0.15;" target="cd_eks" value="rolling update">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_live" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#CFF5D8;strokeColor=#1A7F37;fontColor=#0A3622;fontSize=12;fontStyle=1;" value="✓ New version live&#xa;users served by new pods" vertex="1">
+          <mxGeometry height="60" width="240" x="90" y="2180" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_rollback" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEBE9;strokeColor=#CF222E;fontColor=#82071E;fontSize=12;fontStyle=1;" value="✗ New image unhealthy&#xa;EKS keeps old pods running&#xa;rollback: kubectl rollout undo (per deployment)&#xa;migrations must stay backward-compatible — rollback reverts pods, not schema" vertex="1">
+          <mxGeometry height="95" width="250" x="360" y="2180" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_e_eks_live" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#1A7F37;fontColor=#1A7F37;" value="healthy">
+          <mxGeometry relative="1" x="-0.2889" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="340" y="2090" />
+              <mxPoint x="340" y="2210" />
+            </Array>
+            <mxPoint x="650" y="2090" as="sourcePoint" />
+            <mxPoint x="320" y="2210" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="cd_e_eks_rb" edge="1" parent="1" source="cd_eks" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#CF222E;fontColor=#CF222E;" target="cd_rollback" value="fails health check">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_lbl_runner" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="&lt;span style=&quot;font-size: 13px; font-weight: 700; text-align: left; color: rgb(6, 73, 152);&quot;&gt;Deploy job &lt;br&gt;Fresh clean Runner-machine (ubuntu-latest)&lt;/span&gt;" vertex="1">
+          <mxGeometry height="30" width="400" x="125" y="1350" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_lbl_healthy" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="&lt;span style=&quot;color: rgb(26, 127, 55); font-size: 11px; white-space: nowrap; background-color: rgb(255, 255, 255);&quot;&gt;healthy&lt;/span&gt;" vertex="1">
+          <mxGeometry height="30" width="60" x="320" y="2130" as="geometry" />
+        </mxCell>
+        <mxCell id="OWqz9VefzR3tDpnDu2Eg-1" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="&lt;span style=&quot;color: rgb(9, 105, 218); font-size: 13px; font-weight: 700; text-align: left;&quot;&gt;GitHub-hosted Runner (ubuntu-latest)&lt;/span&gt;&lt;br style=&quot;color: rgb(9, 105, 218); font-size: 13px; font-weight: 700; text-align: left;&quot;&gt;&lt;span style=&quot;color: rgb(9, 105, 218); font-size: 13px; font-weight: 700; text-align: left;&quot;&gt;clean VM that boots, runs the steps, then is destroyed&lt;/span&gt;" vertex="1">
+          <mxGeometry height="30" width="360" x="180" y="340" as="geometry" />
+        </mxCell>
+        <mxCell id="OWqz9VefzR3tDpnDu2Eg-2" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="&lt;span style=&quot;color: rgb(36, 41, 47); font-size: 18px; font-weight: 700; text-align: left; white-space: nowrap;&quot;&gt;CI Pipeline : build &amp;amp; test only&lt;/span&gt;" vertex="1">
+          <mxGeometry height="30" width="260" x="40" y="80" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

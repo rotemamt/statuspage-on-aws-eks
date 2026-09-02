@@ -1,0 +1,84 @@
+<mxfile host="Electron">
+  <diagram name="CI-CD-Summary" id="cicd-summary-01">
+    <mxGraphModel dx="1147" dy="589" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=1;align=left;fontSize=18;fontStyle=1;fontColor=#24292F;" value="CI/CD Pipeline — Overview" vertex="1">
+          <mxGeometry height="30" width="700" x="40" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="subtitle" parent="1" style="text;html=1;align=left;whiteSpace=wrap;fontSize=12;fontColor=#57606A;" value="No GitOps / Argo CD — GitHub Actions builds, tests, and deploys directly. Full detail: cicd-pipeline-v2.drawio" vertex="1">
+          <mxGeometry height="20" width="700" x="40" y="52" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ci_box" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=6 4;fillColor=#F6F8FA;strokeColor=#0969DA;fontColor=#0969DA;verticalAlign=top;align=left;spacingLeft=14;spacingTop=10;fontSize=14;fontStyle=1;" value="CI — runs on every push / pull request" vertex="1">
+          <mxGeometry height="290" width="820" x="40" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="build" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DDF4FF;strokeColor=#0969DA;fontColor=#0A3069;fontSize=13;" value="1 · Build &amp; Test&#xa;lint + unit tests, against real PostgreSQL / Redis" vertex="1">
+          <mxGeometry height="60" width="330" x="80" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="scan" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF3E0;strokeColor=#ED7100;fontColor=#8A4B00;fontSize=13;" value="2 · Security Scan&#xa;Trivy (image) + tfsec (infra) — fails on HIGH severity" vertex="1">
+          <mxGeometry height="60" width="330" x="440" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="e_build_scan" edge="1" parent="1" source="build" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#0969DA;" target="scan">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ci_pass" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#CFF5D8;strokeColor=#1A7F37;fontColor=#0A3622;fontSize=13;fontStyle=1;" value="✓ CI passed&#xa;triggers CD, below" vertex="1">
+          <mxGeometry height="60" width="330" x="80" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="ci_fail" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEBE9;strokeColor=#CF222E;fontColor=#82071E;fontSize=13;fontStyle=1;" value="✗ CI failed&#xa;pipeline stops here — nothing is deployed" vertex="1">
+          <mxGeometry height="60" width="330" x="440" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="e_scan_branch" edge="1" parent="1" source="scan" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#1A7F37;fontColor=#1A7F37;fontSize=11;exitX=0.15;exitY=1;" target="ci_pass" value="pass">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_scan_fail" edge="1" parent="1" source="scan" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#CF222E;fontColor=#CF222E;fontSize=11;exitX=0.85;exitY=1;" target="ci_fail" value="fail">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="cd_box" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=6 4;fillColor=#F6F8FA;strokeColor=#00A4A6;fontColor=#0A5C5E;verticalAlign=top;align=left;spacingLeft=14;spacingTop=10;fontSize=14;fontStyle=1;" value="CD — runs only if CI passed" vertex="1">
+          <mxGeometry height="480" width="820" x="40" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="e_ci_to_cd" edge="1" parent="1" source="ci_pass" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#1A7F37;" target="cd_box">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="push_ecr" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DDF4FF;strokeColor=#0969DA;fontColor=#0A3069;fontSize=13;" value="3 · Push to ECR&#xa;image tagged with the git commit hash" vertex="1">
+          <mxGeometry height="55" width="360" x="260" y="480" as="geometry" />
+        </mxCell>
+
+        <mxCell id="migrate" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E6F6F7;strokeColor=#00A4A6;fontColor=#0A5C5E;fontSize=13;" value="4 · DB Migration&#xa;runs against the real database&#xa;pipeline waits for it to finish before deploying" vertex="1">
+          <mxGeometry height="75" width="360" x="260" y="570" as="geometry" />
+        </mxCell>
+
+        <mxCell id="deploy" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E6F6F7;strokeColor=#00A4A6;fontColor=#0A5C5E;fontSize=13;" value="5 · Deploy to EKS&#xa;rolling update — web, worker, scheduler&#xa;deploy role can only touch these 3 apps, nothing else in the cluster" vertex="1">
+          <mxGeometry height="80" width="360" x="260" y="680" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e_push_migrate" edge="1" parent="1" source="push_ecr" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#0969DA;" target="migrate">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_migrate_deploy" edge="1" parent="1" source="migrate" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#00A4A6;" target="deploy">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="live" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#CFF5D8;strokeColor=#1A7F37;fontColor=#0A3622;fontSize=13;fontStyle=1;" value="✓ Healthy → live&#xa;users are served by the new version" vertex="1">
+          <mxGeometry height="60" width="330" x="80" y="800" as="geometry" />
+        </mxCell>
+        <mxCell id="rollback" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEBE9;strokeColor=#CF222E;fontColor=#82071E;fontSize=13;fontStyle=1;" value="✗ Unhealthy → rollback&#xa;old pods stay up (kubectl rollout undo)" vertex="1">
+          <mxGeometry height="60" width="330" x="440" y="800" as="geometry" />
+        </mxCell>
+        <mxCell id="e_deploy_live" edge="1" parent="1" source="deploy" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#1A7F37;fontColor=#1A7F37;fontSize=11;exitX=0.15;exitY=1;" target="live" value="healthy">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_deploy_rollback" edge="1" parent="1" source="deploy" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#CF222E;fontColor=#CF222E;fontSize=11;exitX=0.85;exitY=1;" target="rollback" value="unhealthy">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="rbnote" parent="1" style="text;html=1;align=left;whiteSpace=wrap;fontSize=11;fontColor=#82071E;spacingLeft=4;" value="Note: rollback restores the pods only — it does not undo database changes. Migrations are written to stay compatible with the previous version." vertex="1">
+          <mxGeometry height="30" width="700" x="80" y="870" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

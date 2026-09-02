@@ -1,0 +1,25 @@
+# PoC image for Status-Page v2.5.1 — builds the app from source so the 3 processes can run.
+FROM python:3.10-slim
+
+ENV PYTHONUNBUFFERED=1
+
+# System packages the install guide requires (Ubuntu list, adapted for slim).
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        git build-essential \
+        libxml2-dev libxslt1-dev libffi-dev libpq-dev libssl-dev zlib1g-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Pin the exact version (upstream is archived — never track a moving branch).
+RUN git clone --depth 1 --branch v2.5.1 \
+        https://github.com/Status-Page/Status-Page.git /opt/status-page
+
+WORKDIR /opt/status-page
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Drop in the PoC configuration.
+COPY configuration.py /opt/status-page/statuspage/statuspage/configuration.py
+
+# manage.py lives here.
+WORKDIR /opt/status-page/statuspage
+
+EXPOSE 8001
