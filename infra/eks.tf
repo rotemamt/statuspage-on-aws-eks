@@ -18,11 +18,6 @@ module "eks" {
 
   enabled_log_types = ["api", "audit"]
 
-  # KMS permission (kms:TagResource) not granted on this account yet.
-  # Secrets still encrypted at rest via etcd's EBS volume, just without the extra KMS envelope layer.
-  create_kms_key = false
-  encryption_config = null
-
   # Optional
   endpoint_public_access = true
 
