@@ -18,6 +18,12 @@ module "eks" {
 
   enabled_log_types = ["api", "audit"]
 
+  # cluster_encryption IAM policy blocked (iam:GetPolicyVersion not granted, keeps
+  # orphaning new policies on retry) — skip ONLY that policy, don't touch encryption_config.
+  # Encryption is already associated on the live cluster and can't be removed without a
+  # full cluster replacement (AWS/Terraform limitation) — do not set encryption_config=null.
+  attach_encryption_policy = false
+
   # Optional
   endpoint_public_access = true
 
