@@ -27,11 +27,23 @@ module "eks" {
   # Optional
   endpoint_public_access = true
 
-  # Optional: Adds the current caller identity as an administrator via cluster access entry
-  enable_cluster_creator_admin_permissions = true
+  # Disabled: this ties cluster-admin to whoever happens to run `apply`, which caused
+  # the access entry to drift/change every time a different person applied. Both people
+  # get a fixed, explicit access_entries below instead — stable no matter who runs apply.
+  enable_cluster_creator_admin_permissions = false
 
-  # Second admin: Roei's IAM user doesn't run apply, so he needs an explicit access entry
   access_entries = {
+    rotem = {
+      principal_arn = "arn:aws:iam::992382545251:user/rotem"
+      policy_associations = {
+        admin = {
+          policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
+          access_scope = {
+            type = "cluster"
+          }
+        }
+      }
+    }
     roey = {
       principal_arn = "arn:aws:iam::992382545251:user/roey"
       policy_associations = {
