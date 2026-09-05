@@ -24,6 +24,15 @@ module "eks" {
   # full cluster replacement (AWS/Terraform limitation) — do not set encryption_config=null.
   attach_encryption_policy = false
 
+  # Same identity-churn bug as the access entries above, but for the KMS key policy:
+  # "if no value is provided, the current caller identity is used" (module source) —
+  # so the key administrator kept flipping between rotem/roey depending on who applied.
+  # Pin both explicitly so it's stable regardless of who runs apply.
+  kms_key_administrators = [
+    "arn:aws:iam::992382545251:user/rotem",
+    "arn:aws:iam::992382545251:user/roey",
+  ]
+
   # Optional
   endpoint_public_access = true
 
