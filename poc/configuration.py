@@ -1,33 +1,31 @@
-# PoC configuration for Status-Page — LOCAL DEMO ONLY, not production.
-# Only the 4 required params from the install guide (ALLOWED_HOSTS, DATABASE, REDIS, SECRET_KEY).
+import os
 
 ALLOWED_HOSTS = ['*']
 
 DATABASE = {
-    'NAME': 'statuspage',
-    'USER': 'statuspage',
-    'PASSWORD': 'statuspage',
-    'HOST': 'db',          # the compose service name
-    'PORT': '',
+    'NAME': os.environ['DB_NAME'],
+    'USER': os.environ['DB_USER'],
+    'PASSWORD': os.environ['DB_PASSWORD'],
+    'HOST': os.environ['DB_HOST'],
+    'PORT': os.environ.get('DB_PORT', ''),
     'CONN_MAX_AGE': 300,
 }
 
 REDIS = {
     'tasks': {
-        'HOST': 'redis',   # the compose service name
+        'HOST': os.environ['REDIS_HOST'],
         'PORT': 6379,
         'PASSWORD': '',
-        'DATABASE': 0,     # queue
-        'SSL': False,
+        'DATABASE': 0,
+        'SSL': True,
     },
     'caching': {
-        'HOST': 'redis',
+        'HOST': os.environ['REDIS_HOST'],
         'PORT': 6379,
         'PASSWORD': '',
-        'DATABASE': 1,     # cache
-        'SSL': False,
+        'DATABASE': 1,
+        'SSL': True,
     },
 }
 
-# PoC key only — 50+ chars. Never reuse a hardcoded key in real environments.
-SECRET_KEY = 'poc-only-do-not-use-in-prod-0123456789abcdefghijklmnop'
+SECRET_KEY = os.environ['SECRET_KEY']
