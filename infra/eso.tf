@@ -30,7 +30,7 @@ resource "aws_iam_role_policy" "eso" {
         "secretsmanager:GetSecretValue",
         "secretsmanager:DescribeSecret"
       ]
-      Resource = "arn:aws:secretsmanager:us-east-1:992382545251:secret:statuspage/*"
+      Resource = aws_db_instance.rds.master_user_secret[0].secret_arn
     }]
   })
 }
