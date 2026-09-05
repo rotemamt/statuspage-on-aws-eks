@@ -23,3 +23,6 @@ COPY configuration.py /opt/status-page/statuspage/statuspage/configuration.py
 WORKDIR /opt/status-page/statuspage
 
 EXPOSE 8001
+
+# Default process = web. worker/scheduler override this via K8s command/args.
+CMD ["gunicorn", "--chdir", "/opt/status-page/statuspage", "--bind", "0.0.0.0:8001", "statuspage.wsgi"]
