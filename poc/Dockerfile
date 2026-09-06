@@ -13,8 +13,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN git clone --depth 1 --branch v2.5.1 \
         https://github.com/Status-Page/Status-Page.git /opt/status-page
 
+# Patch upstream settings.py: add WhiteNoise middleware + static storage backend.
+RUN sed -i "s/'django.middleware.security.SecurityMiddleware',/'django.middleware.security.SecurityMiddleware',\n    'whitenoise.middleware.WhiteNoiseMiddleware',/" /opt/status-page/statuspage/statuspage/settings.py
+RUN sed -i "s#STATIC_URL = f'/{BASE_PATH}static/'#STATIC_URL = f'/{BASE_PATH}static/'\nSTATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'#" /opt/status-page/statuspage/statuspage/settings.py
+
 WORKDIR /opt/status-page
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt whitenoise
 
 # Drop in the PoC configuration.
 COPY configuration.py /opt/status-page/statuspage/statuspage/configuration.py

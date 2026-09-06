@@ -1,6 +1,6 @@
 image:
   repository: 992382545251.dkr.ecr.us-east-1.amazonaws.com/ro-ro-statuspage-dev-repo
-  tag: "4e47dfe-dirty-20260906184024"
+  tag: "fea91d6-dirty-20260906233547"
   pullPolicy: IfNotPresent
 
 config:
@@ -18,8 +18,7 @@ secrets:
 
 processes:
   web:
-    command: ["gunicorn", "--chdir", "/opt/status-page/statuspage", "--bind", "0.0.0.0:8001", "statuspage.wsgi"]
-    replicas: 2
+    command: ["sh", "-c", "python manage.py collectstatic --noinput && gunicorn --bind 0.0.0.0:8001 statuspage.wsgi"]
     service: true
     port: 8001
     resources:
