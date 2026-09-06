@@ -39,13 +39,15 @@ resource "kubernetes_cluster_role_binding" "github_actions_clustersecretstore_vi
   }
 }
 
-# Same gap, different ESO CRD: ExternalSecret is namespaced (unlike ClusterSecretStore),
-# so this is a Role+RoleBinding scoped to the statuspage namespace, not cluster-wide.
-# Full CRUD (not just view) — helm upgrade actually creates/updates this resource, not
-# just diffs it, matching what AmazonEKSEditPolicy would cover if it recognized the CRD.
-resource "kubernetes_role" "eso_externalsecret_editor" {
+# Same gap, different CRDs: ExternalSecret (external-secrets.io) and ScaledObject (keda.sh)
+# are both namespaced (unlike ClusterSecretStore), so this is a Role+RoleBinding scoped to
+# the statuspage namespace, not cluster-wide. Full CRUD (not just view) — helm upgrade
+# actually creates/updates these resources, matching what AmazonEKSEditPolicy would cover
+# if it recognized the CRDs. Every custom (non-built-in) resource kind in helm/statuspage's
+# templates is covered here — checked every template's `kind:` line, this is the full list.
+resource "kubernetes_role" "custom_resource_editor" {
   metadata {
-    name      = "eso-externalsecret-editor"
+    name      = "ci-custom-resource-editor"
     namespace = "statuspage"
   }
   rule {
@@ -53,17 +55,22 @@ resource "kubernetes_role" "eso_externalsecret_editor" {
     resources  = ["externalsecrets"]
     verbs      = ["get", "list", "watch", "create", "update", "patch", "delete"]
   }
+  rule {
+    api_groups = ["keda.sh"]
+    resources  = ["scaledobjects"]
+    verbs      = ["get", "list", "watch", "create", "update", "patch", "delete"]
+  }
 }
 
-resource "kubernetes_role_binding" "github_actions_externalsecret_editor" {
+resource "kubernetes_role_binding" "github_actions_custom_resource_editor" {
   metadata {
-    name      = "github-actions-externalsecret-editor"
+    name      = "github-actions-custom-resource-editor"
     namespace = "statuspage"
   }
   role_ref {
     api_group = "rbac.authorization.k8s.io"
     kind      = "Role"
-    name      = kubernetes_role.eso_externalsecret_editor.metadata[0].name
+    name      = kubernetes_role.custom_resource_editor.metadata[0].name
   }
   subject {
     kind      = "User"
