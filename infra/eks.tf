@@ -74,6 +74,15 @@ module "eks" {
             namespaces = ["statuspage"]
           }
         }
+        # Read-only, cluster-wide — needed only so `helm upgrade` can GET cluster-scoped
+        # resources like ClusterSecretStore (ESO's shared bridge to AWS Secrets Manager,
+        # not namespaced). Write access stays limited to the `statuspage` namespace above.
+        view = {
+          policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSViewPolicy"
+          access_scope = {
+            type = "cluster"
+          }
+        }
       }
     }
   }
