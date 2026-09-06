@@ -1,0 +1,49 @@
+{
+  "__inputs": [
+    { "name": "DS_PROMETHEUS", "label": "Prometheus", "type": "datasource", "pluginId": "prometheus", "pluginName": "Prometheus" }
+  ],
+  "annotations": { "list": [] },
+  "editable": true,
+  "panels": [
+    {
+      "id": 1, "type": "stat", "title": "Status",
+      "gridPos": { "h": 6, "w": 6, "x": 0, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "targets": [ { "expr": "probe_success", "refId": "A", "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" } } ],
+      "fieldConfig": { "defaults": {
+        "mappings": [ { "type": "value", "options": { "0": { "text": "DOWN", "color": "red" }, "1": { "text": "UP", "color": "green" } } } ],
+        "color": { "mode": "thresholds" },
+        "thresholds": { "steps": [ { "color": "red", "value": null }, { "color": "green", "value": 1 } ] }
+      }, "overrides": [] }
+    },
+    {
+      "id": 2, "type": "stat", "title": "HTTP status code",
+      "gridPos": { "h": 6, "w": 6, "x": 6, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "targets": [ { "expr": "probe_http_status_code", "refId": "A", "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" } } ],
+      "fieldConfig": { "defaults": {
+        "color": { "mode": "thresholds" },
+        "thresholds": { "steps": [ { "color": "red", "value": null }, { "color": "green", "value": 200 }, { "color": "red", "value": 400 } ] }
+      }, "overrides": [] }
+    },
+    {
+      "id": 3, "type": "timeseries", "title": "Uptime (1 = up)",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "targets": [ { "expr": "probe_success", "refId": "A", "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" } } ]
+    },
+    {
+      "id": 4, "type": "timeseries", "title": "Response time (ms)",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "targets": [ { "expr": "probe_duration_seconds * 1000", "refId": "A", "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" } } ],
+      "fieldConfig": { "defaults": { "unit": "ms" }, "overrides": [] }
+    }
+  ],
+  "schemaVersion": 39,
+  "tags": [ "statuspage" ],
+  "templating": { "list": [] },
+  "time": { "from": "now-30m", "to": "now" },
+  "title": "Status-Page Monitoring",
+  "version": 1
+}

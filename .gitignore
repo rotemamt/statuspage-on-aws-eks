@@ -18,3 +18,4 @@ terraform.rc
 
 # Claude Code local settings
 .claude/settings.local.json
+monitoring/grafana-values.yaml

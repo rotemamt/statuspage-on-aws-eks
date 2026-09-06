@@ -1,0 +1,21 @@
+alertmanager: { enabled: false }
+kube-state-metrics: { enabled: false }
+prometheus-node-exporter: { enabled: false }
+prometheus-pushgateway: { enabled: false }
+server:
+  retention: 2h
+  persistentVolume: { enabled: false }
+extraScrapeConfigs: |
+  - job_name: blackbox-http
+    metrics_path: /probe
+    params:
+      module: [http_2xx]
+    static_configs:
+      - targets: [ http://roro-status.duckdns.org ]
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: blackbox-prometheus-blackbox-exporter:9115
