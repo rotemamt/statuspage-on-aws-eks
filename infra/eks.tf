@@ -1,8 +1,8 @@
 module "eks" {
-  source = "terraform-aws-modules/eks/aws"
+  source  = "terraform-aws-modules/eks/aws"
   version = "~> 21.0"
 
-  name = "ro-ro-statuspage-cluster"
+  name               = "ro-ro-statuspage-cluster"
   kubernetes_version = "1.36"
 
   addons = {
@@ -66,25 +66,25 @@ module "eks" {
     }
   }
 
-  vpc_id = module.vpc.vpc_id
+  vpc_id     = module.vpc.vpc_id
   subnet_ids = module.vpc.private_subnets
-  
+
   # EKS Managed Node Group(s)
   eks_managed_node_groups = {
     app = {
       # Starting on 1.30, AL2023 is the default AMI type for EKS managed node groups
-      ami_type = "AL2023_x86_64_STANDARD"
+      ami_type       = "AL2023_x86_64_STANDARD"
       instance_types = ["t3.medium"]
 
-      min_size = 2
-      max_size = 4
+      min_size     = 2
+      max_size     = 4
       desired_size = 2
     }
   }
 
   tags = {
     Environment = "dev"
-    Terraform = "true"
-    Owner = "Rotem and Roei"
+    Terraform   = "true"
+    Owner       = "Rotem and Roei"
   }
 }

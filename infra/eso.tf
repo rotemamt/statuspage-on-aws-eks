@@ -30,8 +30,10 @@ resource "aws_iam_role_policy" "eso" {
         "secretsmanager:GetSecretValue",
         "secretsmanager:DescribeSecret"
       ]
-      Resource = aws_db_instance.rds.master_user_secret[0].secret_arn
-    }]
+      Resource = [
+        aws_db_instance.rds.master_user_secret[0].secret_arn,
+        aws_secretsmanager_secret.app.arn,
+    ] }]
   })
 }
 

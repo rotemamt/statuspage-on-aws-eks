@@ -29,3 +29,4 @@ REDIS = {
 }
 
 SECRET_KEY = os.environ['SECRET_KEY']
+SITE_URL = os.environ.get('SITE_URL', 'http://localhost')

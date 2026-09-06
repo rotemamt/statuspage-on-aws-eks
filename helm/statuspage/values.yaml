@@ -1,6 +1,6 @@
 image:
   repository: 992382545251.dkr.ecr.us-east-1.amazonaws.com/ro-ro-statuspage-dev-repo
-  tag: "5279c29-dirty-20260906155012"
+  tag: "4e47dfe-dirty-20260906184024"
   pullPolicy: IfNotPresent
 
 config:
@@ -9,6 +9,7 @@ config:
   DB_NAME: statuspage
   DB_USER: statuspage
   REDIS_HOST: master.ro-ro-statuspage-redis.7fftml.use1.cache.amazonaws.com
+  SITE_URL: "http://localhost"
 
 secrets:
   region: us-east-1
