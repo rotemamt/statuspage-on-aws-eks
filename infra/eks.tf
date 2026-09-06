@@ -64,6 +64,18 @@ module "eks" {
         }
       }
     }
+    github_actions = {
+      principal_arn = aws_iam_role.github_actions_deploy.arn
+      policy_associations = {
+        edit = {
+          policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSEditPolicy"
+          access_scope = {
+            type       = "namespace"
+            namespaces = ["statuspage"]
+          }
+        }
+      }
+    }
   }
 
   vpc_id     = module.vpc.vpc_id

@@ -36,7 +36,7 @@ resource "aws_iam_role_policy" "github_actions_deploy" {
       {
         Effect   = "Allow"
         Action   = ["ecr:BatchCheckLayerAvailability", "ecr:PutImage", "ecr:InitiateLayerUpload", "ecr:UploadLayerPart", "ecr:CompleteLayerUpload"]
-        Resource = "arn:aws:ecr:us-east-1:992382545251:repository/status-page"
+        Resource = "arn:aws:ecr:us-east-1:992382545251:repository/ro-ro-statuspage-dev-repo"
       },
       {
         Effect   = "Allow"
