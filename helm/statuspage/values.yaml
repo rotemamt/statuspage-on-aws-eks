@@ -1,0 +1,13 @@
+# helm/statuspage/values.yaml
+image:
+  repository: 992382545251.dkr.ecr.us-east-1.amazonaws.com/ro-ro-statuspage-app
+  tag: latest
+
+replicaCount:
+  web: 2
+  worker: 2
+
+config:
+  dbName: statuspage
+  dbPort: "5432"
+  redisHost: master.ro-ro-statuspage-redis.7fftml.use1.cache.amazonaws.com

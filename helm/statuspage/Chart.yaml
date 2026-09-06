@@ -1,0 +1,5 @@
+# helm/statuspage/Chart.yaml
+apiVersion: v2
+name: statuspage
+description: Status-Page application
+version: 0.1.0
