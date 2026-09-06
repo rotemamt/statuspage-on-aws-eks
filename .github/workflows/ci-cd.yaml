@@ -37,7 +37,7 @@ jobs:
         run: curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
 
       - name: Security scan — infra (Terraform)
-        run: trivy config --exit-code 1 --severity HIGH,CRITICAL infra/
+        run: trivy config --exit-code 1 --severity HIGH,CRITICAL --ignorefile .trivyignore infra/
 
   deploy:
     needs: build-and-test
@@ -61,7 +61,7 @@ jobs:
 
       - name: Build image
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:${{ github.sha }} .
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:${{ github.sha }} poc
         env:
           ECR_REGISTRY: ${{ steps.ecr-login.outputs.registry }}
 

@@ -1,0 +1,7 @@
+# Each line: check ID + why we accept it (reviewed 2026-09, not an oversight)
+
+AWS-0011  # No WAF on CloudFront — static CSS/JS only, no user input/auth surface, not worth the cost at this scale
+AWS-0132  # SSE-S3 default encryption is sufficient; a customer-managed KMS key hits the same iam:GetPolicyVersion wall we already fought on EKS, for marginal benefit on non-sensitive static assets
+AWS-0040  # EKS public endpoint is required: gated by IAM+RBAC (not open access), needed for local dev and GitHub Actions runners outside the VPC — documented, defended decision
+AWS-0041  # Same reasoning as AWS-0040 — GitHub-hosted runners have no fixed IP range, restricting this would break CI/CD deploys entirely
+AWS-0104  # Standard EKS node egress requirement (image pulls, AWS API calls via NAT) — module's own default, accepted at this project's scale
