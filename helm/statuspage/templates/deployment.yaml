@@ -1,0 +1,43 @@
+{{- range $name, $proc := .Values.processes }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $.Release.Name }}-{{ $name }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    app: {{ $.Release.Name }}
+    component: {{ $name }}
+spec:
+  replicas: {{ $proc.replicas }}
+  {{- if eq (default "" $proc.strategy) "Recreate" }}
+  strategy:
+    type: Recreate
+  {{- end }}
+  selector:
+    matchLabels:
+      app: {{ $.Release.Name }}
+      component: {{ $name }}
+  template:
+    metadata:
+      labels:
+        app: {{ $.Release.Name }}
+        component: {{ $name }}
+    spec:
+      containers:
+        - name: {{ $name }}
+          image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag }}"
+          imagePullPolicy: {{ $.Values.image.pullPolicy }}
+          command: {{ toJson $proc.command }}
+          {{- if $proc.port }}
+          ports:
+            - containerPort: {{ $proc.port }}
+          {{- end }}
+          envFrom:
+            - configMapRef:
+                name: {{ $.Release.Name }}-config
+            - secretRef:
+                name: {{ $.Release.Name }}-db
+            - secretRef:
+                name: {{ $.Release.Name }}-app
+---
+{{- end }}

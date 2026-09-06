@@ -1,5 +1,6 @@
-# helm/statuspage/Chart.yaml
 apiVersion: v2
 name: statuspage
-description: Status-Page application
+description: Status-Page (Django) on EKS — web, worker and scheduler from one image
+type: application
 version: 0.1.0
+appVersion: "2.5.1"

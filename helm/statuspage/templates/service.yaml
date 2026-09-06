@@ -1,0 +1,22 @@
+{{- range $name, $proc := .Values.processes }}
+{{- if $proc.service }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $.Release.Name }}-{{ $name }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    app: {{ $.Release.Name }}
+    component: {{ $name }}
+spec:
+  type: ClusterIP
+  selector:
+    app: {{ $.Release.Name }}
+    component: {{ $name }}
+  ports:
+    - port: 80
+      targetPort: {{ $proc.port }}
+      protocol: TCP
+---
+{{- end }}
+{{- end }}

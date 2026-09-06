@@ -1,13 +1,44 @@
-# helm/statuspage/values.yaml
 image:
-  repository: 992382545251.dkr.ecr.us-east-1.amazonaws.com/ro-ro-statuspage-app
-  tag: latest
-
-replicaCount:
-  web: 2
-  worker: 2
+  repository: 992382545251.dkr.ecr.us-east-1.amazonaws.com/ro-ro-statuspage-dev-repo
+  tag: "5279c29-dirty-20260906155012"
+  pullPolicy: IfNotPresent
 
 config:
-  dbName: statuspage
-  dbPort: "5432"
-  redisHost: master.ro-ro-statuspage-redis.7fftml.use1.cache.amazonaws.com
+  DB_HOST: ro-ro-statuspage-db.cx248m4we6k7.us-east-1.rds.amazonaws.com
+  DB_PORT: "5432"
+  DB_NAME: statuspage
+  DB_USER: statuspage
+  REDIS_HOST: master.ro-ro-statuspage-redis.7fftml.use1.cache.amazonaws.com
+
+secrets:
+  region: us-east-1
+  rdsSecretName: "rds!db-6dcfeb3d-1ba7-4ee6-ab4b-4a2eaef5b280"
+  appSecretName: "statuspage/app"
+
+processes:
+  web:
+    command: ["gunicorn", "--chdir", "/opt/status-page/statuspage", "--bind", "0.0.0.0:8001", "statuspage.wsgi"]
+    replicas: 2
+    service: true
+    port: 8001
+  worker:
+    command: ["python", "manage.py", "rqworker", "high", "default", "low"]
+    replicas: 1
+    service: false
+  scheduler:
+    command: ["python", "manage.py", "rqscheduler"]
+    replicas: 1
+    service: false
+    strategy: Recreate
+
+migrationJob:
+  enabled: true
+  command:
+    - "sh"
+    - "-c"
+    - "python manage.py migrate && (python manage.py collectstatic --no-input || true) && (python manage.py createsuperuser --noinput || true)"
+  superuser:
+    username: admin
+    email: admin@example.com
+
+namespace: statuspage
