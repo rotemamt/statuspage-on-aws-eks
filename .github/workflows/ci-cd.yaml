@@ -37,7 +37,7 @@ jobs:
         run: curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
 
       - name: Security scan — infra (Terraform)
-        run: trivy config --exit-code 1 --severity HIGH,CRITICAL --ignorefile .trivyignore infra/
+        run: trivy config --exit-code 1 --severity HIGH,CRITICAL --ignorefile .trivyignore --skip-dirs infra/.terraform infra/
 
   deploy:
     needs: build-and-test
