@@ -18,7 +18,7 @@ RUN sed -i "s/'django.middleware.security.SecurityMiddleware',/'django.middlewar
 RUN sed -i "s#STATIC_URL = f'/{BASE_PATH}static/'#STATIC_URL = f'/{BASE_PATH}static/'\nSTATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'#" /opt/status-page/statuspage/statuspage/settings.py
 
 WORKDIR /opt/status-page
-RUN pip install --no-cache-dir -r requirements.txt whitenoise
+RUN pip install --no-cache-dir -r requirements.txt whitenoise "Django==5.1.14" "pillow==12.1.1" "pymdown-extensions==11.0.1" "wheel==0.46.2" "jaraco.context==6.1.0"
 
 # Drop in the PoC configuration.
 COPY configuration.py /opt/status-page/statuspage/statuspage/configuration.py
