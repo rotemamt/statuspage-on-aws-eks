@@ -18,19 +18,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.10"
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
 
-      - name: Install dependencies
-        run: pip install -r requirements.txt
+      - name: Terraform validate
+        run: |
+          cd infra
+          terraform init -backend=false
+          terraform validate
 
-      - name: Lint
-        run: flake8 . || true   # remove "|| true" once the codebase is actually lint-clean
+      - name: Setup Helm
+        uses: azure/setup-helm@v4
+
+      - name: Helm lint
+        run: helm lint helm/statuspage
 
       - name: Install Trivy
-        run: |
-          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
+        run: curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
 
       - name: Security scan — infra (Terraform)
         run: trivy config --exit-code 1 --severity HIGH,CRITICAL infra/
