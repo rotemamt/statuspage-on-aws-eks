@@ -1,0 +1,32 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: {{ .Release.Name }}-worker
+  namespace: {{ .Release.Namespace }}
+spec:
+  scaleTargetRef:
+    name: {{ .Release.Name }}-worker
+  minReplicaCount: 0
+  maxReplicaCount: 5
+  triggers:
+    - type: redis
+      metadata:
+        address: {{ .Values.config.REDIS_HOST }}:6379
+        listName: "rq:queue:high"
+        listLength: "5"
+        databaseIndex: "0"
+        enableTLS: "true"
+    - type: redis
+      metadata:
+        address: {{ .Values.config.REDIS_HOST }}:6379
+        listName: "rq:queue:default"
+        listLength: "5"
+        databaseIndex: "0"
+        enableTLS: "true"
+    - type: redis
+      metadata:
+        address: {{ .Values.config.REDIS_HOST }}:6379
+        listName: "rq:queue:low"
+        listLength: "5"
+        databaseIndex: "0"
+        enableTLS: "true"

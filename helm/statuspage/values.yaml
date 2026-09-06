@@ -9,7 +9,7 @@ config:
   DB_NAME: statuspage
   DB_USER: statuspage
   REDIS_HOST: master.ro-ro-statuspage-redis.7fftml.use1.cache.amazonaws.com
-  SITE_URL: "http://localhost"
+  SITE_URL: "http://roro-status.duckdns.org"
 
 secrets:
   region: us-east-1
@@ -22,15 +22,36 @@ processes:
     replicas: 2
     service: true
     port: 8001
+    resources:
+      requests:
+        cpu: "100m"
+        memory: "128Mi"
+      limits:
+        cpu: "500m"
+        memory: "256Mi"
   worker:
     command: ["python", "manage.py", "rqworker", "high", "default", "low"]
     replicas: 1
     service: false
+    resources:
+      requests:
+        cpu: "100m"
+        memory: "128Mi"
+      limits:
+        cpu: "500m"
+        memory: "256Mi"
   scheduler:
     command: ["python", "manage.py", "rqscheduler"]
     replicas: 1
     service: false
     strategy: Recreate
+    resources:
+      requests:
+        cpu: "100m"
+        memory: "128Mi"
+      limits:
+        cpu: "500m"
+        memory: "256Mi"
 
 migrationJob:
   enabled: true

@@ -12,3 +12,10 @@ resource "helm_release" "keda" {
   namespace        = "keda"
   create_namespace = true
 }
+
+resource "helm_release" "reloader" {
+  name       = "reloader"
+  repository = "https://stakater.github.io/stakater-charts"
+  chart      = "reloader"
+  namespace  = "kube-system"
+}
