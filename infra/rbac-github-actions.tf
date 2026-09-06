@@ -16,10 +16,19 @@ resource "kubernetes_cluster_role" "eso_clustersecretstore_viewer" {
   metadata {
     name = "eso-clustersecretstore-viewer"
   }
+  # list/watch cannot be restricted by resource_names (RBAC limitation) — read-only, harmless.
   rule {
     api_groups = ["external-secrets.io"]
     resources  = ["clustersecretstores"]
-    verbs      = ["get", "list", "watch"]
+    verbs      = ["list", "watch"]
+  }
+  # Write is pinned to the single object the chart owns. No "create" (would allow pointing a
+  # new store at other secrets), no "delete".
+  rule {
+    api_groups     = ["external-secrets.io"]
+    resources      = ["clustersecretstores"]
+    resource_names = ["aws-secrets-manager"]
+    verbs          = ["get", "update", "patch"]
   }
 }
 
