@@ -71,7 +71,7 @@ jobs:
 
       - name: Security scan — image
         run: |
-          trivy image --exit-code 1 --ignore-unfixed --severity HIGH,CRITICAL $ECR_REGISTRY/$ECR_REPOSITORY:${{ github.sha }}
+          trivy image --exit-code 1 --ignore-unfixed --ignorefile .trivyignore --severity HIGH,CRITICAL $ECR_REGISTRY/$ECR_REPOSITORY:${{ github.sha }}
         env:
           ECR_REGISTRY: ${{ steps.ecr-login.outputs.registry }}
 

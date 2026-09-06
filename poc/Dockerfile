@@ -19,7 +19,7 @@ RUN sed -i "s#STATIC_URL = f'/{BASE_PATH}static/'#STATIC_URL = f'/{BASE_PATH}sta
 
 WORKDIR /opt/status-page
 RUN pip install --no-cache-dir -r requirements.txt
-RUN pip install --no-cache-dir --upgrade whitenoise "Django==5.1.14" "pillow==12.1.1" "pymdown-extensions==11.0.1" "wheel==0.46.2" "jaraco.context==6.1.0"
+RUN pip install --no-cache-dir --upgrade whitenoise "Django==5.1.14" "pillow==12.3.0" "pymdown-extensions==11.0.1" "wheel==0.46.2" "jaraco.context==6.1.0"
 
 # Drop in the PoC configuration.
 COPY configuration.py /opt/status-page/statuspage/statuspage/configuration.py

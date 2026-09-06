@@ -5,3 +5,9 @@ AWS-0132  # SSE-S3 default encryption is sufficient; a customer-managed KMS key 
 AWS-0040  # EKS public endpoint is required: gated by IAM+RBAC (not open access), needed for local dev and GitHub Actions runners outside the VPC — documented, defended decision
 AWS-0041  # Same reasoning as AWS-0040 — GitHub-hosted runners have no fixed IP range, restricting this would break CI/CD deploys entirely
 AWS-0104  # Standard EKS node egress requirement (image pulls, AWS API calls via NAT) — module's own default, accepted at this project's scale
+
+# Image scan: vendored copies inside setuptools (setuptools/_vendor/*) — internal
+# packaging-tool dependencies, never imported by the running app, not network-reachable.
+# Re-vendored by setuptools itself on its own release cycle, not something we control.
+CVE-2026-23949  # jaraco.context vendored inside setuptools
+CVE-2026-24049  # wheel vendored inside setuptools
