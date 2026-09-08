@@ -22,3 +22,6 @@ monitoring/grafana-values.yaml
 
 # Presentation binaries — add the final deck deliberately, not by accident
 docs/*.pptx
+
+# Internal working document — not part of the public repo
+PROJECT_STATUS.md
