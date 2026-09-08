@@ -65,7 +65,7 @@ module "eks" {
       }
     }
     github_actions = {
-      principal_arn = aws_iam_role.github_actions_deploy_v2.arn
+      principal_arn = aws_iam_role.github_actions_deploy_v3.arn
       policy_associations = {
         edit = {
           policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSEditPolicy"

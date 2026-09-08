@@ -43,7 +43,7 @@ resource "kubernetes_cluster_role_binding" "github_actions_clustersecretstore_vi
   }
   subject {
     kind      = "User"
-    name      = "arn:aws:sts::992382545251:assumed-role/GitHubActionsDeployRoleV2/GitHubActions"
+    name      = "arn:aws:sts::992382545251:assumed-role/GitHubActionsDeployRoleV3/GitHubActions"
     api_group = "rbac.authorization.k8s.io"
   }
 }
@@ -83,7 +83,7 @@ resource "kubernetes_role_binding" "github_actions_custom_resource_editor" {
   }
   subject {
     kind      = "User"
-    name      = "arn:aws:sts::992382545251:assumed-role/GitHubActionsDeployRoleV2/GitHubActions"
+    name      = "arn:aws:sts::992382545251:assumed-role/GitHubActionsDeployRoleV3/GitHubActions"
     api_group = "rbac.authorization.k8s.io"
   }
 }

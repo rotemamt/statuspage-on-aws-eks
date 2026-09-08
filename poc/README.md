@@ -11,7 +11,7 @@ From this folder:
 docker compose up --build
 ```
 
-First run builds the image (clones the app, installs deps) — a few minutes.
+First run builds the image (clones the app, installs deps) - a few minutes.
 `init` runs migrations + creates the admin user, then exits. That is expected.
 
 Open: http://localhost:8001/dashboard/  — login `admin` / `adminadmin`.
