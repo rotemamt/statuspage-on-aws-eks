@@ -11,7 +11,7 @@ CONTEXT="poc"
 SHA="$(git rev-parse --short HEAD)"
 if [ -n "$(git status --porcelain)" ]; then
   TAG="${SHA}-dirty-$(date +%Y%m%d%H%M%S)"
-  echo "⚠  working tree מלוכלך → tag=${TAG}"
+  echo "warning: working tree is dirty, tagging ${TAG}"
 else
   TAG="${SHA}"
 fi

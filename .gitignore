@@ -19,3 +19,6 @@ terraform.rc
 # Claude Code local settings
 .claude/settings.local.json
 monitoring/grafana-values.yaml
+
+# Presentation binaries — add the final deck deliberately, not by accident
+docs/*.pptx
