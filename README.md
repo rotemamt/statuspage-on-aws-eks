@@ -13,21 +13,7 @@ Built by Rotem and Roei as a DevOps course final project.
 
 ## Architecture
 
-```
-                     Internet
-                        │
-                   ALB (public subnets, 2 AZ)
-                        │
-   ┌────────────────────┴────────────────────┐
-   │      EKS 1.36 — private subnets, 2 AZ   │
-   │                                         │
-   │   web ×2        rq-worker      scheduler│
-   │   (gunicorn)    (queue)        (cron)   │
-   └───────┬─────────────┬───────────────────┘
-           │             │
-   RDS PostgreSQL   ElastiCache Redis
-   (Multi-AZ)       (Multi-AZ, TLS)
-```
+[![AWS architecture — Status-Page on EKS](diagrams/aws-infra-flow.png)](diagrams/aws-infra-flow.png)
 
 One container image runs all three processes — they differ only by the `command` they are started with.
 
@@ -43,7 +29,7 @@ One container image runs all three processes — they differ only by the `comman
 | Add-ons | ALB Controller, External Secrets Operator, metrics-server, KEDA, Cluster Autoscaler |
 
 Detailed design notes and the reasoning behind each choice: [`docs/architecture-notes.md`](docs/architecture-notes.md).
-Editable diagrams: [`diagrams/`](diagrams/).
+Editable source: the diagram PNG has the draw.io source embedded — see [`diagrams/`](diagrams/).
 
 ## Repository layout
 
@@ -52,7 +38,7 @@ infra/        Terraform — 38 resources across 16 files (VPC, EKS, RDS, Redis, 
 helm/         Helm chart — 12 templates, one chart deploys all three processes
 poc/          Dockerfile, Django settings, and a docker-compose PoC for running the stack locally
 monitoring/   Prometheus values and a Grafana dashboard for external uptime probing
-diagrams/     Architecture diagrams (draw.io + SVG)
+diagrams/     Architecture diagram (PNG with embedded draw.io source) and the CI/CD diagram
 docs/         Architecture and design notes
 .github/      CI/CD workflow
 ```

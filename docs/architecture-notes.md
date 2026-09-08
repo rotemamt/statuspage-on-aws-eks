@@ -282,7 +282,7 @@ Practical: don't hand-write the VPC — use `terraform-aws-modules/vpc/aws`. Bui
 
 ## AWS infra diagram — decisions locked for the mentor presentation (25 Aug 2026)
 
-Diagram: [`diagrams/aws-infra.drawio`](diagrams/aws-infra.drawio)
+Diagram: [`diagrams/aws-infra-flow.png`](../diagrams/aws-infra-flow.png)
 
 | Question | Decision | Why |
 |---|---|---|
